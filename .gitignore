@@ -1,0 +1,11 @@
+# project
+application.yml
+AwsCredentials.properties
+
+# tool
+.idea
+.gradle
+build
+out
+
+# etc

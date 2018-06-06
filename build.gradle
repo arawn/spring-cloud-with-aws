@@ -1,0 +1,61 @@
+group = 'org.springframework.cloud'
+version = '0.1.0'
+
+buildscript {
+    ext {
+        dependencyManagementVersion = '1.0.5.RELEASE'
+    }
+    repositories {
+        maven { url 'http://repo.spring.io/plugins-release' }
+    }
+    dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:${dependencyManagementVersion}")
+    }
+}
+
+configure(subprojects) {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+
+    ext {
+        versions = [
+            springPlatform : 'Brussels-SR10',
+            springCloud    : 'Edgware.SR3',
+            awsJavaSDK     : '1.11.160'
+        ]
+    }
+
+    repositories {
+        maven { url "https://repo.spring.io/libs-release" }
+        mavenCentral()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "io.spring.platform:platform-bom:${versions.springPlatform}"
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
+            mavenBom "com.amazonaws:aws-java-sdk-bom:${versions.awsJavaSDK}"
+        }
+    }
+
+    configurations {
+        // replaced with jcl-over-slf4j
+        all*.exclude group: 'commons-logging', module: 'commons-logging'
+        // replaced with log4j-over-slf4j
+        all*.exclude group: 'log4j', module: 'log4j'
+    }
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    compileJava.options.encoding = 'UTF-8'
+}
+
+project('zuul-aws-lambda') {
+    dependencies {
+        compile 'org.springframework.cloud:spring-cloud-starter-zuul'
+        compile 'com.amazonaws:aws-java-sdk-lambda'
+        compile 'org.projectlombok:lombok'
+
+        testCompile 'org.springframework.boot:spring-boot-starter-test'
+    }
+}

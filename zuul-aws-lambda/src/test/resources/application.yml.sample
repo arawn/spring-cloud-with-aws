@@ -1,0 +1,18 @@
+zuul:
+  routes:
+    # dynamic-routing
+    google:
+      url: https://www.google.com/
+    # service-lambda
+    lambda:
+      path: /lambda
+      url: {lambda arn}
+
+hystrix:
+  command.service-lambda.execution.isolation.thread.timeoutInMilliseconds: 5250
+
+logging:
+  level:
+    org.springframework.boot: WARN
+    org.springframework.web: INFO
+    org.springframework.cloud.netflix: DEBUG
