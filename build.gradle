@@ -50,7 +50,7 @@ configure(subprojects) {
     compileJava.options.encoding = 'UTF-8'
 }
 
-project('zuul-aws-lambda') {
+project('spring-cloud-netflix-zuul-aws') {
     dependencies {
         compile 'org.springframework.cloud:spring-cloud-starter-zuul'
         compile 'com.amazonaws:aws-java-sdk-lambda'
