@@ -1,0 +1,7 @@
+spring.cloud.config:
+  s3:
+    enabled: true
+    credentials:
+      accessKey: {aws.accessKey}
+      secretKey: {aws.secretKey}
+    buckets: {bucketName}

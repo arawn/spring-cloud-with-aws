@@ -1,3 +1,4 @@
 rootProject.name = 'spring-cloud-with-aws'
 
+include 'spring-cloud-config-aws'
 include 'spring-cloud-netflix-zuul-aws'

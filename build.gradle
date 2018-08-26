@@ -19,8 +19,8 @@ configure(subprojects) {
 
     ext {
         versions = [
-            springPlatform : 'Brussels-SR10',
-            springCloud    : 'Edgware.SR3',
+            springPlatform : 'Brussels-SR12',
+            springCloud    : 'Edgware.SR4',
             awsJavaSDK     : '1.11.160'
         ]
     }
@@ -48,6 +48,20 @@ configure(subprojects) {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
     compileJava.options.encoding = 'UTF-8'
+}
+
+project('spring-cloud-config-aws') {
+    dependencies {
+        compile 'org.springframework.cloud:spring-cloud-starter'
+        compile 'org.springframework.cloud:spring-cloud-aws-core'
+        compile 'org.projectlombok:lombok'
+
+        runtime 'org.slf4j:jcl-over-slf4j'
+        runtime 'org.slf4j:jul-to-slf4j'
+        runtime 'org.slf4j:log4j-over-slf4j'
+
+        testCompile 'org.springframework.boot:spring-boot-starter-test'
+    }
 }
 
 project('spring-cloud-netflix-zuul-aws') {
