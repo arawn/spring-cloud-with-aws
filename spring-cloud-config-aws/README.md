@@ -35,10 +35,9 @@ spring.cloud.config:
 ```
 .
 bucket
-└── resources
-    ├── application.yml
-    ├── application-development.yml    
-    └── application-production.yml
+├── application.yml
+├── application-development.yml    
+└── application-production.yml
 ```   
 
 위와 같이 S3 bucket에 3개에 설정 파일이 등록되어 있고, 스프링부트 프로파일로 `production`을 설정 후 애플리케이션을 기동하면 다음과 같이 로그가 출력된다. 
