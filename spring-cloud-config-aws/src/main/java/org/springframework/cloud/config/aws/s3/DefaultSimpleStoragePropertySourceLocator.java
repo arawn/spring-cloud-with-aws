@@ -11,6 +11,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author arawn.kr@gmail.com
@@ -49,8 +51,8 @@ public class DefaultSimpleStoragePropertySourceLocator extends AbstractSimpleSto
     protected PropertySource<?> locateInternal(Environment environment) {
         List<String> profiles = new ArrayList<>(Arrays.asList(environment.getActiveProfiles()));
         List<Resource> resources = Arrays.stream(getProperties().getBuckets())
-                                         .map(bucket -> String.format(PROPERTIES_LOCATION_PATTERN, bucket))
-                                         .flatMap(location -> findResources(location).stream())
+                                         .map(this::mapLocationPattern)
+                                         .flatMap(this::fetchResources)
                                          .filter(resource -> resource.acceptsProfiles(environment))
                                          .sorted(new PropertiesResourceComparator(environment))
                                          .collect(Collectors.toList());
@@ -76,12 +78,18 @@ public class DefaultSimpleStoragePropertySourceLocator extends AbstractSimpleSto
         return propertySource.getPropertySources().isEmpty() ? null : propertySource;
     }
 
-    protected List<PropertiesResource> findResources(String locationPattern) {
+    protected String mapLocationPattern(String bucket) {
+        if (StringUtils.endsWithIgnoreCase(bucket, "/")) {
+            return String.format("s3://%s" + DEFAULT_PROPERTIES_NAME + "*.*", bucket);
+        }
+        return String.format("s3://%s/" + DEFAULT_PROPERTIES_NAME + "*.*", bucket);
+    }
+
+    protected Stream<PropertiesResource> fetchResources(String locationPattern) {
         try {
             log.info("Fetching config from aws at: {}", locationPattern);
             return Arrays.stream(resourceLoader.getResources(locationPattern))
-                         .map(PropertiesResource::new)
-                         .collect(Collectors.toList());
+                         .map(PropertiesResource::new);
         } catch (IOException error) {
             throw new IllegalStateException(error);
         }

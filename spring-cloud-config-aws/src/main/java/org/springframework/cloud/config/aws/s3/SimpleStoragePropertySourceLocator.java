@@ -21,8 +21,6 @@ public interface SimpleStoragePropertySourceLocator extends PropertySourceLocato
 
     String DEFAULT_PROPERTIES_NAME = "application";
 
-    // starting name with DEFAULT_PROPERTIES_NAME, all files in s3 bucket
-    String PROPERTIES_LOCATION_PATTERN = "s3://%s/" + DEFAULT_PROPERTIES_NAME + "*.*";
     // DEFAULT_PROPERTIES_NAME-{profile}.yml (properties, xml, etc)
     Pattern EXTRACT_PROFILE_PATTERN = Pattern.compile("^("+ DEFAULT_PROPERTIES_NAME + "-)(.*)\\.(.*)$");
 
